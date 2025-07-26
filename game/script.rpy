@@ -16,7 +16,9 @@ init -1:
     define config.side_image_tag = None
 
 # 遊戲從這裡開始。
-
+label restore_window:
+    window show
+    return
 label start:
     show screen skip_button
     # 顯示背景。 預設情況下，它使用佔位符，但您可以
@@ -51,12 +53,12 @@ label start:
     yu "老夫近刊有一稿，備載演習之精要。汝可少閱，閱畢即請起草。"
 
 label after_skip:
-    scene black    # 或 scene bg room
+    scene bg room    # 或 scene black
     hide li yu
     show screen book_icon
-    show screen book_viewer
     $ book_debug = True
     narrator "你可以點擊笠翁新刊書籍，看看他有何指教。"
+    narrator "笠翁已將書本奉送給你，你可以隨時翻閱。"
 
     # 遊戲結束。
 
