@@ -51,8 +51,10 @@ label start:
     yu "你這就替老夫將《生我樓》寫成戲文，何如？"
     you "晚生實在不通..."
     yu "噫，閣下不會是不曾讀過拙作？那也不妨事！閣下解得演習格局之妙，才是重中之重，怕怎地？"
-    you "先生且慢..."
-    yu "老夫近刊有一稿，備載演習之精要。汝可少閱，閱畢即請起草。"
+    you "蒙先生錯愛，晚生..."
+    yu "這小說改作戲文，該改換頭面，不妨暫擬新題，喚作《巧團圓》。"
+    yu "成八卦者十六將也，分十六將者三十二候也。這戲就分上下兩部各十六齣，加上開場，共三十三齣，脩短合度，是個好數字！"
+    yu "恰好老夫近來刊有一稿，備載演習之精要。汝可少閱，閱畢即請起草。"
 
 label after_skip:
     scene bg room    # 或 scene black
@@ -92,7 +94,7 @@ label act1:
     show expression Text("第一齣 / Act One", size=150, color="#e7c96f", xalign=0.5, yalign=0.4) at appear_zoom_fade
     $ renpy.pause(8, hard=True) 
     narrator "即將搬演第一齣。"
-
+    show screen hud
 label act1_choosedebut:
     narrator "要讓哪個腳色先上場呢？"
     menu:
@@ -118,33 +120,47 @@ label mo_debut:
     narrator ""
     menu:
         "末腳上場，該讓他..."
-        "先唱一曲《西江月》":
+        "先唱一曲《西江月》，為作者立言":
             jump act1_chosen_qu          
-        "先吟一闋《鳳凰臺上憶吹簫》":
+        "先吟一闋《鳳凰臺上憶吹簫》，向觀眾稟明全劇大意":
             jump act1_chosen_ci
 
 label act1_chosen_qu:
+    hide mo
+    show mo_sing_solemn at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
     mo "浪播傳奇八種，賺來一派虛名。閒時自閱自批評，愧殺無鹽對鏡。"
     mo "既辱知音謬賞，敢因醜盡藏形。再為悅己效娉婷，似覺後來差勝。"
     menu:
         "接著該讓他..."
-        "吟一闋《鳳凰臺上憶吹簫》":
+        "吟一闋《鳳凰臺上憶吹簫》，向觀眾稟明全劇大意":
+            hide mo_sing_solemn
+            show mo_speak_solemn at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
             mo "姚子無親，興嗟風木，夢中時現層樓。遇鄰居窈窕，許訂鴛儔。硬買途人作父，強認母、似沒來由。誰料取，因癡得福，舊美兼收。"
             mo "凝眸，尋家問室，見夢中樓閣，詫是魂遊。驗諸般信物，件件相投。親父子依然完聚，舊翁婿好事重修。爭榮嗣，又兼報捷，三貴臨頭。"
             $ score_act1(correct_order=True)
+            ""
             jump act1_jiamen
 
 label act1_chosen_ci:
+    hide mo
+    show mo_speak_solemn at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
     mo "姚子無親，興嗟風木，夢中時現層樓。遇鄰居窈窕，許訂鴛儔。硬買途人作父，強認母、似沒來由。誰料取，因癡得福，舊美兼收。"
     mo "凝眸，尋家問室，見夢中樓閣，詫是魂遊。驗諸般信物，件件相投。親父子依然完聚，舊翁婿好事重修。爭榮嗣，又兼報捷，三貴臨頭。"
     menu:
         "接著該讓他..."
-        "唱一曲《西江月》":
+        "唱一曲《西江月》，為作者立言":
+            hide mo_speak_solemn
+            show mo_sing_solemn at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
             mo "浪播傳奇八種，賺來一派虛名。閒時自閱自批評，愧殺無鹽對鏡。"
             mo "既辱知音謬賞，敢因醜盡藏形。再為悅己效娉婷，似覺後來差勝。"
             $ score_act1(correct_order=False)
+            ""
             jump act1_jiamen
+
 label act1_jiamen:
+    hide mo_speak_solemn
+    hide mo_sing_solemn
+    show mo at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
     mo "恤老婦的偏得嬌妻，姚克承善能致福。"
     mo "防失節的果得全貞，曹小姐才堪免辱。"
     mo "避亂兵的反失愛女，姚東山智也實愚。"

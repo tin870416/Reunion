@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 ## 初始化
 ################################################################################
 
@@ -55,13 +55,13 @@ define gui.interface_text_color = '#404040'
 ## 字形和字形大小 #####################################################################
 
 ## 用於遊戲內文字的字形
-define gui.text_font = "SourceHanSansLite.ttf"
+define gui.text_font = "/font/myfont.ttc"
 
 ## 用於角色名稱的字形
 define gui.name_text_font = "SourceHanSansLite.ttf"
 
 ## 用於遊戲外文字的字形
-define gui.interface_text_font = "SourceHanSansLite.ttf"
+define gui.interface_text_font = "/font/myfont.ttc"
 
 ## 正常對話文字的大小
 define gui.text_size = 33

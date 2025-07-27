@@ -5,17 +5,6 @@
 default liyu_score = 0
 
 # ------------------ SCORING FUNCTIONS ------------------
-screen score_popup(msg):
-    zorder 300  # 保證在最上層
-    frame:
-        at score_popup_anim
-        background Solid("#0008")  # 半透明背景
-        xalign 1.0   # 靠右
-        yalign 0.0   # 靠上
-        xpadding 10
-        ypadding 50
-        text msg color "#FFD700" size 25 xalign 0.5
-        timer 2.0 action Hide("score_popup")  # 2 秒後自動消失
 
 # 動畫：淡入 -> 等待 -> 淡出
 transform score_popup_anim:
@@ -29,10 +18,11 @@ init python:
         global liyu_score
         if correct_order:
             liyu_score += 15
-            renpy.call_screen("score_popup", msg="李漁：先有一小曲，再有一詞，開場得法！")
+            # 測試時先用這行替代
+            renpy.notify("李漁：先有小曲，再有一詞，開場得法！")
         else:
             liyu_score -= 10
-            renpy.call_screen("score_popup", msg="李漁：亂了開場！")
+            renpy.notify("李漁：怎地不先唱曲？亂了開場！")
 
     # Act 2 scoring: 引子 -> 定場白
     def score_act2(correct_order=True):

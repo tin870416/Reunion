@@ -1264,7 +1264,8 @@ style notify_text is gui_text
 
 style notify_frame:
     ypos gui.notify_ypos
-
+    xalign 0.5   # 改成 0.5 即居中
+    yalign 0.05   # 越小越靠上
     background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
     padding gui.notify_frame_borders.padding
 
