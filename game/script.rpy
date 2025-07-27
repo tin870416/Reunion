@@ -5,6 +5,7 @@
 define yu = Character("李漁")
 define you = Character("你")
 define narrator = Character(None)
+define mo = Character("末")
 image bg room = Transform("images/room.png", zoom=1.5)
 screen skip_button():
     textbutton "跳過" action Jump("after_skip") xpos 0.9 ypos 0.05
@@ -37,7 +38,7 @@ label start:
 
     yu "傳奇原為消愁設，費盡杖頭歌一曲。"
     yu "唯我填詞不賣愁，一夫不笑是吾憂。"
-    yu "老夫笠翁，專候閣下已久了！"
+    yu "老夫李漁，賤號笠翁，專候閣下已久了！"
     you "晚生久仰尊名了！"
     yu "當今填詞者眾，貴戚通侯亦單重聲音，只惜時無顧曲周郎。最有識見之客，亦作矮人觀場。可怪！可怪！"
     yu "閣下可知，老夫今日何事相請？"
@@ -60,6 +61,59 @@ label after_skip:
     narrator "你可以點擊笠翁新刊書籍，看看他有何指教。"
     narrator "笠翁已將書本奉送給你，你可以隨時翻閱。"
 
-    # 遊戲結束。
+label commit_writing:
+    menu:
+        "你現在要..."
+        "開始寫作":
+            narrator "好的，這就為你研墨。"
+            jump drama_start
+        "再讀一會兒書，能拖則拖":
+            show screen book_viewer
+            jump commit_writing
+
+label open_book:
+    show screen book_viewer
+    $ ui.interact()  # 等待玩家操作書本
+    return
+
+# 動畫定義（顯示字出現、放大、淡出）
+transform appear_zoom_fade:
+    alpha 0.0
+    zoom 0.5
+    linear 4 alpha 1.0 zoom 1.0  # 淡入+放大
+    pause 1                      # 停留
+    linear 1 alpha 0.0           # 淡出
+    on hide: 
+        alpha 0.0             # 確保 hide 時立即隱藏
+
+label drama_start:
+    scene black
+    show expression Text("第一齣 / Act One", size=150, color="#e7c96f", xalign=0.5, yalign=0.4) at appear_zoom_fade
+    $ renpy.pause(8, hard=True) 
+    narrator "即將搬演第一齣。"
+    narrator "要讓哪個腳色先上場呢？"
+    menu:
+        "哪個腳色先上場，才合乎李漁所授心法？"
+        "生":
+            "錯了"
+        "旦":
+            "錯了"
+        "淨":
+            "錯了"
+            return
+        "末":
+            jump mo_debut
+        "丑":
+            "錯了"
+            return
+
+label mo_debut:
+    mo "i'm singing"
+label sheng_debut:
+label dan_debut:
 
     return
+
+
+    # 遊戲結束。
+

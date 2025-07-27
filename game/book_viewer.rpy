@@ -75,10 +75,10 @@ init python:
             int(mouse_pos[0] - offset_x),
             int(mouse_pos[1] - offset_y)
         )
+
 screen book_viewer():
     modal True
     zorder 200
-
     # Update mouse position
     timer 0.05 repeat True action Function(_update_mouse_on_book)
     frame:
@@ -143,20 +143,16 @@ screen book_viewer():
                             unhovered SetVariable("book_tooltip", "")
                             action SetVariable("book_translation", hl.get("translation", None))
 
-        # Control bar
-        hbox:
-            spacing 20
-            xalign 0.5
-            yalign 1.0
-            textbutton "上一頁" action Function(book_prev)
-            text "[book_index + 1] / [_book_len()]"
-            textbutton "下一頁" action Function(book_next)
-            null width 150
-            textbutton "闔書" action [
-                Hide("book_viewer"),
-                Function(renpy.call_in_new_context, "restore_window"),
-                Return()
-            ]
+            # Control bar
+            hbox:
+                spacing 20
+                xalign 0.5
+                yalign 1.0
+                textbutton "上一頁" action Function(book_prev)
+                text "[book_index + 1] / [_book_len()]"
+                textbutton "下一頁" action Function(book_next)
+                null width 150
+                textbutton "闔書" action Hide("book_viewer")
         # Tooltip
         if book_tooltip:
             frame:
@@ -193,6 +189,4 @@ screen book_icon():
         xpos 30
         ypos 80
         action [
-            Hide("say"),        # 隱藏對話框的 screen
-            Show("book_viewer") # 顯示書本
-        ]
+            Show("book_viewer")        ]
