@@ -1592,3 +1592,8 @@ style slider_vbox:
 style slider_slider:
     variant "small"
     xsize 900
+
+screen skip_to_next_menu_button():
+    zorder 500
+    textbutton "跳到下一個選項" action Skip(fast=True) xpos 0.9 ypos 0.965 text_size 20
+define config.overlay_screens = ["skip_to_next_menu_button"]

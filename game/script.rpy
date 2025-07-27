@@ -7,21 +7,22 @@ define you = Character("你")
 define narrator = Character(None)
 define mo = Character("末")
 image bg room = Transform("images/room.png", zoom=1.5)
-screen skip_button():
-    textbutton "跳過" action Jump("after_skip") xpos 0.9 ypos 0.05
-init -1:
-    python:
-        config.has_music = False
-        config.has_sound = False
-        config.has_voice = False
-    define config.side_image_tag = None
+image bg stage = Transform("stage.png", zoom=1.5)
+default preferences.skip_unseen = True
+
+init python:
+    # 自訂動作：略過直到下一個 menu
+    class SkipToMenu(Action):
+        def __call__(self):
+            renpy.skip()
+            renpy.pause(0.1)
 
 # 遊戲從這裡開始。
 label restore_window:
     window show
     return
 label start:
-    show screen skip_button
+    show screen skip_to_next_menu_button
     # 顯示背景。 預設情況下，它使用佔位符，但您可以
     # 將檔案（名為 "bg room.png" 或 "bg room.jpg"）新增至
     # images 目錄來顯示它。
@@ -66,7 +67,7 @@ label commit_writing:
         "你現在要..."
         "開始寫作":
             narrator "好的，這就為你研墨。"
-            jump drama_start
+            jump act1
         "再讀一會兒書，能拖則拖":
             show screen book_viewer
             jump commit_writing
@@ -86,18 +87,22 @@ transform appear_zoom_fade:
     on hide: 
         alpha 0.0             # 確保 hide 時立即隱藏
 
-label drama_start:
+label act1:
     scene black
     show expression Text("第一齣 / Act One", size=150, color="#e7c96f", xalign=0.5, yalign=0.4) at appear_zoom_fade
     $ renpy.pause(8, hard=True) 
     narrator "即將搬演第一齣。"
+
+label act1_choosedebut:
     narrator "要讓哪個腳色先上場呢？"
     menu:
         "哪個腳色先上場，才合乎李漁所授心法？"
         "生":
             "錯了"
+            jump act1_choosedebut
         "旦":
             "錯了"
+            return
         "淨":
             "錯了"
             return
@@ -108,7 +113,44 @@ label drama_start:
             return
 
 label mo_debut:
-    mo "i'm singing"
+    scene bg stage
+    show mo at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
+    narrator ""
+    menu:
+        "末腳上場，該讓他..."
+        "先唱一曲《西江月》":
+            jump act1_chosen_qu          
+        "先吟一闋《鳳凰臺上憶吹簫》":
+            jump act1_chosen_ci
+
+label act1_chosen_qu:
+    mo "浪播傳奇八種，賺來一派虛名。閒時自閱自批評，愧殺無鹽對鏡。"
+    mo "既辱知音謬賞，敢因醜盡藏形。再為悅己效娉婷，似覺後來差勝。"
+    menu:
+        "接著該讓他..."
+        "吟一闋《鳳凰臺上憶吹簫》":
+            mo "姚子無親，興嗟風木，夢中時現層樓。遇鄰居窈窕，許訂鴛儔。硬買途人作父，強認母、似沒來由。誰料取，因癡得福，舊美兼收。"
+            mo "凝眸，尋家問室，見夢中樓閣，詫是魂遊。驗諸般信物，件件相投。親父子依然完聚，舊翁婿好事重修。爭榮嗣，又兼報捷，三貴臨頭。"
+            $ score_act1(correct_order=True)
+            jump act1_jiamen
+
+label act1_chosen_ci:
+    mo "姚子無親，興嗟風木，夢中時現層樓。遇鄰居窈窕，許訂鴛儔。硬買途人作父，強認母、似沒來由。誰料取，因癡得福，舊美兼收。"
+    mo "凝眸，尋家問室，見夢中樓閣，詫是魂遊。驗諸般信物，件件相投。親父子依然完聚，舊翁婿好事重修。爭榮嗣，又兼報捷，三貴臨頭。"
+    menu:
+        "接著該讓他..."
+        "唱一曲《西江月》":
+            mo "浪播傳奇八種，賺來一派虛名。閒時自閱自批評，愧殺無鹽對鏡。"
+            mo "既辱知音謬賞，敢因醜盡藏形。再為悅己效娉婷，似覺後來差勝。"
+            $ score_act1(correct_order=False)
+            jump act1_jiamen
+label act1_jiamen:
+    mo "恤老婦的偏得嬌妻，姚克承善能致福。"
+    mo "防失節的果得全貞，曹小姐才堪免辱。"
+    mo "避亂兵的反失愛女，姚東山智也實愚。"
+    mo "求假嗣的卻遇真幾，尹小樓斷而忽續。"
+
+
 label sheng_debut:
 label dan_debut:
 
