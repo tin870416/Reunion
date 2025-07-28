@@ -165,6 +165,11 @@ style say_dialogue:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#input
 
+screen skip_to_next_menu_button():
+    zorder 500
+    textbutton "跳到下一個選項" action Skip(fast=True) xpos 0.9 ypos 0.965 text_size 20
+define config.overlay_screens = ["skip_to_next_menu_button","actnumber"]
+
 screen input(prompt):
     style_prefix "input"
 
@@ -230,7 +235,7 @@ style choice_button_text is default:
 screen quick_menu():
 
     ## 確保它出現在其他螢幕的頂端。
-    zorder 100
+    zorder 999
 
     if quick_menu:
 
@@ -250,7 +255,8 @@ screen quick_menu():
 
 ## 此代碼確保只要玩家沒有明確隱藏介面， quick_menu 畫面就會在遊戲中顯示。
 init python:
-    config.overlay_screens.append("quick_menu")
+    if "quick_menu" not in config.overlay_screens:
+        config.overlay_screens.append("quick_menu")
 
 define quick_menu = True
 
@@ -1496,7 +1502,7 @@ style pref_vbox:
 screen quick_menu():
     variant "touch"
 
-    zorder 100
+    zorder 999
 
     if quick_menu:
 
@@ -1594,7 +1600,65 @@ style slider_slider:
     variant "small"
     xsize 900
 
-screen skip_to_next_menu_button():
-    zorder 500
-    textbutton "跳到下一個選項" action Skip(fast=True) xpos 0.9 ypos 0.965 text_size 20
-define config.overlay_screens = ["skip_to_next_menu_button"]
+
+# 顯示
+screen actnumber():
+    if show_actnumber:
+    # 使用固定定位，確保 HUD 在右上角
+        frame:
+            style "act_frame"
+
+            # 加背景圖
+            has vbox:
+                xalign 0.1
+                yalign 0.5
+                spacing 1
+
+            text "第 [act_no] 齣" style "act_text"
+            text "Act [act_no]" style "act_text" 
+
+# 自定義樣式
+style act_frame:
+    ypos gui.notify_ypos
+    xalign 0.99   # 改成 0.5 即居中
+    yalign 0.05   # 越小越靠上
+    background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
+    padding gui.notify_frame_borders.padding
+
+style act_text is default:
+    color "#000000"
+    size 20
+    xalign 0.1
+    xpos 0.1
+    font "font/PingFang.ttc"
+
+# 動畫定義（顯示字出現、放大、淡出）
+transform appear_zoom_fade:
+    alpha 0.0
+    zoom 0.5
+    linear 2 alpha 1.0 zoom 1.0   # 淡入+放大
+    pause 1                       # 停留
+    linear 1 alpha 0.0            # 淡出
+    on hide:
+        alpha 0.0                 # 確保 hide 時立即隱藏
+
+# Act title 專用 screen
+screen act_title(txt):
+    text txt:
+        size 150
+        color "#e7c96f"
+        xalign 0.5
+        yalign 0.4
+        at appear_zoom_fade
+
+init python:
+    def show_act_title_auto(duration=4):
+        """
+        根據 act_no 自動顯示 Act Title
+        """
+        txt = f"第{act_no}齣 / Act {act_no}"
+        renpy.show_screen("act_title", txt=txt)
+        renpy.pause(duration, hard=True)
+        renpy.hide_screen("act_title")
+
+default show_actnumber = False

@@ -14,15 +14,23 @@ transform score_popup_anim:
     linear 0.3 alpha 0.0
 
 init python:
-    def score_act1(correct_order=True):
+    def score_debut(choosemo=True):
+        global liyu_score
+        if choosemo:
+            liyu_score += 15
+            renpy.notify("李漁：好個副末開場！")
+        else:
+            liyu_score -= 10
+            renpy.notify("李漁：副末開場是常格，無之總欠一味。")
+
+    def score_mo(correct_order=True):
         global liyu_score
         if correct_order:
             liyu_score += 15
-            # 測試時先用這行替代
-            renpy.notify("李漁：先有小曲，再有一詞，開場得法！")
+            renpy.notify("李漁：先有小曲，再有一詞，次序井然！")
         else:
             liyu_score -= 10
-            renpy.notify("李漁：怎地不先唱曲？亂了開場！")
+            renpy.notify("李漁：唉呀，怎地不先唱曲？！")
 
     # Act 2 scoring: 引子 -> 定場白
     def score_act2(correct_order=True):
