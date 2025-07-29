@@ -1614,8 +1614,8 @@ screen actnumber():
                 yalign 0.5
                 spacing 1
 
-            text "第 [act_no] 齣" style "act_text"
-            text "Act [act_no]" style "act_text" 
+            text "第 [store.act_no] 齣" style "act_text"
+            text "Act [store.act_no]" style "act_text" 
 
 # 自定義樣式
 style act_frame:
@@ -1656,9 +1656,24 @@ init python:
         """
         根據 act_no 自動顯示 Act Title
         """
-        txt = f"第{act_no}齣 / Act {act_no}"
+        txt = f"第{store.act_no}齣 / Act {store.act_no}"
         renpy.show_screen("act_title", txt=txt)
         renpy.pause(duration, hard=True)
         renpy.hide_screen("act_title")
 
 default show_actnumber = False
+
+#map
+screen world_map():
+    tag map
+    add "images/map_base.png"  # the base image of the map
+
+    # Example location button: East Chamber
+    imagebutton:
+        idle "images/btn_east_idle.png"
+        hover "images/btn_east_hover.png"
+        xpos 300
+        ypos 400
+        action ShowMenu("location_info", location="east_chamber")
+
+    # Add more buttons for other locations...

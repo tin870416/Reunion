@@ -6,8 +6,8 @@ default act_no = 0
 default character_positions = {
     "sheng": None,      # 角色「生」，即姚繼
     "dan": None,   # 角色「旦」，即曹小姐
-    "xiaosheng": None,     # 角色「小生」，即姚父
-    "xiaodan": None,     # 角色「小旦」，即姚夫人
+    "yaofu": None,     # 角色姚父
+    "yaowife": None,     # 角色姚夫人
     "wai": None,     # 角色「外」，即尹小樓
     "laodan": None, # 角色「老旦」，即尹妻
 }
@@ -24,14 +24,13 @@ init python:
 
 init python:
     def end_of_act(act_name):
-        global act_history, act_no
-        if act_name in act_history:
-            idx = act_history.index(act_name)
-            act_history = act_history[:idx + 1]
+        if act_name in store.act_history:
+            idx = store.act_history.index(act_name)
+            store.act_history = store.act_history[:idx + 1]
         else:
-            act_history.append(act_name)
-        act_no = len(act_history)
-        renpy.log(f"[DEBUG] Act history: {act_history}, Current act_no: {act_no}")
+            store.act_history.append(act_name)
+        store.act_no = len(store.act_history)
+        renpy.log(f"[DEBUG] Act history: {store.act_history}, Current act_no: {store.act_no}")
 
 init python:
     def check_reunion():

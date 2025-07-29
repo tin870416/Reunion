@@ -6,18 +6,31 @@ define yu = Character("李漁")
 define you = Character("你")
 define narrator = Character(None)
 define mo = Character("末")
-define sh = Character("【生】姚繼")
+define sh = Character("姚繼")
 define old = Character("鄰翁")
-define dan = Character("曹小姐")
+define dan = Character("曹儷人")
 define yaofu = Character("姚器汝")
+define yaocao = Character("曹玉宇（姚器汝）")
+define yaowife = Character("曹夫人")
+define wai = Character("尹小樓")
+define waiwife = Character("尹夫人")
+define fneigh = Character("表姐丈")
+define rneigh = Character("伊大哥")
+define fnr = Character("表姐丈、伊大哥")
 image bg room = Transform("images/room.png", zoom=1.5)
+image bg gate = Transform("images/gate.png", zoom=1.3)
+image bg yaoroom = Transform("images/yaoroom.png", zoom=1.5)
+image bg yinroom = Transform("images/yinroom.png", zoom=1.5)
 image bg stage = Transform("stage.png", zoom=1.5)
 image bg childroom = Transform("childroom.png", zoom=1.25)
 image chest = "chest.png"
 image chest_inner = "chest_inner.png"
 image bg garden = Transform("garden.png", zoom=1.25)
+image bg fight = Transform("fight.png", zoom=1.25)
 image bg childroom_blur = im.Blur(im.FactorScale("images/childroom.png", 1.25), 4.0)
 image hand = "hand.png"
+image bg_fight_shake = "bg/fight.jpg"
+
 
 default preferences.skip_unseen = True
 
@@ -33,6 +46,7 @@ label restore_window:
     window show
     return
 label start:
+    $ start_new_run()
     show screen skip_to_next_menu_button
     # 顯示背景。 預設情況下，它使用佔位符，但您可以
     # 將檔案（名為 "bg room.png" 或 "bg room.jpg"）新增至
@@ -117,7 +131,8 @@ label mo_debut:
     scene bg stage
     show mo at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
     pause 1.5
-    if any(x in act_history for x in ["夢訊", "議贅", "爭繼"]):
+    #if any(x in act_history for x in ["夢訊", "議贅", "爭繼"]):
+    if store.act_no > 1:
         $ renpy.notify("李漁：此時才讓末腳登場，奇哉怪哉！")
     narrator ""
     menu:
@@ -179,29 +194,32 @@ label mo_jiamen:
     narrator "他們非常期待！"
     hide mo
     narrator "接下來，請決定下一齣要讓哪個腳色上場。"
+    $ end_of_act("開場")
     menu:
         "下一齣的主角是..."
-        "生" if "夢訊" not in act_history:
+        "生（姚繼）" if "夢訊" not in act_history:
             "生腳這就換裝，準備登場。"
             scene black with fade
             jump sheng_debut
-            $ end_of_act("開場")
-        "旦" if "議贅" not in act_history:
+            
+        "旦（曹儷人）及其家人" if "議贅" not in act_history:
             "旦腳這就換裝，準備登場。"
             scene black with fade
             jump dan_debut
-            $ end_of_act("開場")
-        "外" if "爭繼" not in act_history:
+            
+        "外（尹小樓）及其妻子" if "爭繼" not in act_history:
             "外腳這就換裝，準備登場。"
             scene black with fade
             jump wai_debut
-            $ end_of_act("開場")
-
+            
 label sheng_debut:
     scene black
     $ show_act_title_auto()
     show sheng_2_pensive at Transform(zoom=0.7, xalign=0.5, yalign=0.5) 
     with dissolve
+    pause 1.5
+    if store.act_no == 2 and "開場" in store.act_history:
+        $ renpy.notify("沖場用生，一本戲文之好歹，即於此時定價。")
     ""
     sh "{i}飽殺侏儒。嘆饑時曼倩，望米如珠。長貧知有意，天欲盡其膚。{/i}"
     sh "{i}除故我，換新吾，才許建雄圖。看士人，改軀換貌，盡賴詩書。{/i}"
@@ -281,21 +299,281 @@ label open_chest:
         "接下來要讓哪個腳色上場？"
         "末" if "開場" not in act_history:
             jump mo_debut
-        "旦" if "議贅" not in act_history:
+        "旦（曹儷人）及其家人" if "議贅" not in act_history:
             jump dan_debut
-        "外" if "爭繼" not in act_history:
+        "外（尹小樓）及其妻子" if "爭繼" not in act_history:
             jump wai_debut
+        "讓曹玉宇來找姚繼，看看他有何話說" if "議贅" in act_history:
+            jump try_sheng
     
     
 label dan_debut:
     scene black
     $ show_act_title_auto()
-    show dan_smile at Transform(zoom=0.7, xalign=0.5, yalign=0.5) 
+    pause 1.5
+    scene bg yaoroom
+    show yaofu at Transform(zoom=0.7, xalign=0.5, yalign=0.2) 
+    if store.act_no == 2 and "開場" in store.act_history:
+        $ renpy.notify("李漁：沖場竟不用生，似乎不是詞場常格。")
     ""
     yaofu "市城戎馬地，決策早居鄉。妻子無多口，琴書只一囊。"
+    ""
     yaofu "老夫姚器汝，號東山，蜀川人也。"
-label wai_debut:
+    yaofu "本有兩榜科名，一朝事業，因見時事日非，朝綱盡亂，所以請告回四川老家，已經數載。"
+    yaofu "誰知近日又有那闖逆揭竿，賊氛四起。"
+    yaofu "老夫做了二十年仕宦，萬一遇見賊徒，豈能幸免？"
+    yaofu "所以背鄉離井，寄跡他方。"
+    yaofu "如今來在漢口地方，扮做個懸壺的醫士，賣藥糊口。"
+    yaofu "又怕人看出行徑來，改了一個極俗的姓名，喚做曹玉宇。"
+    yaocao "唉，雖然曾經官臻八座，位至三台，不幸亡兒夭折，繼嗣無人。"
+    yaocao "至親家眷只有夫人、女兒兩口。連這女兒也不是親生，乃同年至戚之女，名喚曹玉瑤。"
+    yaocao "我這養女兒呀，年已及笄，尚未許嫁。"
+    yaocao "我盤算著，只待招贅一人，就立為嗣子。如此一來，不只女兒有託，也免了我無嗣之憂。"
+    yaocao "且待夫人出來，與他商議則個。"
+    hide yaofu
+    show yaofu at Transform(zoom=0.7, xalign=0.9, yalign=0.2) 
+    show yaowife_worried_norm at Transform(zoom=1.1, xalign=0.5, yalign=0.3)
+    with dissolve
+    ""
+    yaowife "老相公，我和你飄零異鄉，身旁沒有親人，止得這個養女。"
+    show dan_scared at Transform(zoom=0.86, xalign=0.005, yalign=0.99)
+    with dissolve
+    yaowife "當初指望兒子長大，配成一對夫妻，不想兒子夭亡，這句說話講不起了。"
+    yaowife "如今年已長成，還不曾替他議婚，萬一闖賊殺來，叫他跟著誰人逃走？"
+    yaowife "難道我老夫妻兩口，自己照管不來，還帶著個如花似玉的閨女，去招災惹禍不成？"
+    yaowife "且莫說他的姻事，就是我們兩口的終身，也全無著落。當初兒子未亡，不想立嗣，如今靠著何人？"
+    yaowife "還不想急急回家，立個螟蛉之子。"
+    ""
+    yaofu "夫人，你的說話句句是金石之言，老夫豈不知道？"
+    yaofu "所以遲疑未決者，只為要把兩樁事情合成一件。"
+    ""
+    yaowife "我知道了。你說這個女孩子，原在可兒可媳之間，要招個男子在身旁，就接我們的宗祀麽？"
+    yaofu "便是這等說。"
+    hide yaowife_worried_norm
+    show yaowife_worried_norm at Transform(zoom=1.1, xalign=0.5, yalign=0.3, xzoom=-1)
+    yaowife "我兒，你的意思何如？"
+    menu:
+        yaowife "我兒，你的意思何如？"
+        "久蒙恩養，不啻親生，正要常依膝下。":
+            jump dan_choose_stay
+        "若是箇好人才，豈願紆尊入贅？女兒覺得不是擇人之法。":
+            jump dan_choose_refuse
+    label dan_choose_refuse:
+    dan "若是箇好人才，豈願紆尊入贅？女兒覺得不是擇人之法。"
+    yaofu "你這孩子，意思是甘教我曹家絕嗣了？"
+    dan "不是這個意思。"
+    hide yaowife_worried_norm
+    show yaowife_worried_norm at Transform(zoom=1.1, xalign=0.5, yalign=0.3)
+    jump candidate_yao
+    label dan_choose_stay:
+    dan "久蒙恩養，不啻親生，正要常依膝下。"
+    hide yaowife_worried_norm
+    show yaowife_worried_norm at Transform(zoom=1.1, xalign=0.5, yalign=0.3)
+    yaowife "若還如此，這段婚姻就草草不得了。"
+    label candidate_yao:
+    yaowife "我們仕宦人家，女婿還可以將就，兒子卻將就不得。"
+    yaowife "你做過三品高官，論理該有恩蔭，萬一大亂之後，忽然平靜起來，回到家中，就是他去補官授職了。"
+    yaowife "亂離之世，如何選得出這個人來？"
+    yaofu "夫人休得癡想，「太平」二字是不能再見的了。"
+    yaofu "只要尋個少年老成之人，做了避亂的幫手，到那賊寇近身的時節，可以見景生情，逃得性命出去，救得家小回來，就是個佳兒佳婿了。"
+    yaofu "我眼睛裡面，已相中一個。"
+    yaofu "此人雖非宗裔，卻恰巧與我同姓，又正好少室無家。"
+    yaowife "端的是誰，你且講來我聽。"
+    yaofu "他的房舍與我的寓所，只隔得一層籬笆。你去想來便了。"
+    yaowife "莫非是姚小官麽？果然好個孩子。"
+    yaowife "只是一件，有人在背後談論他，說不是姚家的真種，三四歲的時節，去幾兩銀子買下來的。"
+    yaofu "只要孩子肯學好，那些閒話聽他怎的。"
+    ""
+    dan "奴家也曾見過，是好一副面龐。"
+    yaofu "說便這等說，也還要留心試他。"
+    yaofu "這等世界，倒不喜他會讀書，只要老成練達，做得事來就可以相許。"
+    yaofu "我明日見他，自有話說。"
+    scene black
+    $ character_positions["dan"] = "漢陽"
+    $ character_positions["yaofu"] = "漢陽"
+    $ character_positions["yaowife"] = "漢陽"
+    pause 1.0
+    $ renpy.notify(f"角色位置：{character_positions}")
+    $ end_of_act("議贅")
+    menu:
+        "接下來要讓哪個腳色上場？"
+        "末" if "開場" not in act_history:
+            jump mo_debut
+        "生（姚繼）" if "夢訊" not in act_history:
+            jump sheng_debut
+        "外（尹小樓）及其妻子" if "爭繼" not in act_history:
+            jump wai_debut
+        "讓曹玉宇去找姚繼，看他有何話說" if "夢訊" in act_history:
+            jump try_sheng
 
+    
+label wai_debut:
+    scene black
+    $ show_act_title_auto()
+    scene bg yinroom
+    with dissolve
+    pause 1.5
+    if store.act_no == 2 and "開場" in store.act_history:
+        $ renpy.notify("李漁：沖場竟不用生，似乎不是詞場常格。")
+    show yin_fullsize at Transform(zoom=1.2, xalign=0.7, yalign=0.005)
+    ""
+    wai "{i}天道無知，如聾似瞽，善人後嗣全無。鷙同梟鳥，偏自擁多雛。{/i}"
+    ""
+    wai "老夫姓尹名厚，別號小樓，湖廣鄖陽人也。"
+    wai "祖上以防邊靖難之功，世授錦衣衛千戶，老夫襲職多年，告假還鄉，又經數載。"
+    wai "我家屢世單傳，傳到老夫也止生一子，不想於十五年前，隨了一隊孩童上山去玩耍，及至晚上回來，別人的兒子都在，單少我家這條命根。"
+    wai "彼時正有虎災，尋覓多時，不見蹤影，定是落於虎口無疑了！"
+    wai "所以至今無後，竟把世職空懸。有許多親戚朋友勸我立嗣，我只是不依。"
+    show yinwife_fullsize at Transform(zoom=1, xalign=0.2, yalign=0.005)
+    with dissolve
+    ""
+    waiwife "聞得有幾個親朋，不由你我情願，都要攜酒備席，把兒子送上門來勸你承繼，你還是收他不收他？"
+    wai "一概不收！"
+    waiwife "為什麼不收？"
+    wai "你道他勉強要來承繼，果然是一片好心麽？不過要得我的家產，襲我的官職罷了！"
+    waiwife "這等，你的意思待怎麼樣？"
+    wai "我想立後承先，不是一樁小事，況且平空白地把萬金家產付他，又賠上一個恩蔭，豈是輕易出手的？"
+    wai "必須揀個有才有幹，承受得起的人，又要在平日間試他，先有些情意到我，然後許他承繼。"
+    wai "這樣的嗣子，後來才不忤逆。夫人，你道我講得是麽？"
+    waiwife "是便極是。還有一種世情，你不曾慮到。"
+    waiwife "你要試人，不知你便有心，他也未必無意。"
+    wai "夫人，你這話是什麼意思？"
+    waiwife "他人知道你我無兒，必想一人繼立，故意把虛情哄你，也未見得。"
+    wai "夫人也慮得是。我想近處之人，哪個不知道我家的事，要試真情也試他不出。"
+    wai "除非丟了故鄉，到別處去交接，才試得出這個人來。"
+    wai "我不久就要遠行，夫人在家可耐心等候。"
+    hide yinwife_fullsize
+    show yin_fullsize at Transform(zoom=1, xalign=0.6, yalign=0.005, xzoom=-1)
+    pause 1.0
+    ""
+    show teenager at Transform(zoom=0.65, xalign=0.05, yalign=1.0) 
+    with moveinleft
+    show fat_neighbor at Transform(zoom=0.6, xalign=0.25, yalign=1.0)
+    with moveinleft
+    ""
+    fneigh "{i}攜樽酒，過親廬，好把兒相贈，效勤劬。接得他家嗣，便高門戶，這家財不怕不歸吾。{/i}"
+    fneigh "{i}從今不穿布，從今不穿布。{/i}"
+    ""
+    wai "呀，表姊丈來了。許久不見，為甚麽攜著酒盒，又帶了外甥過來？"
+    fneigh "此來不為別事，只因老舅沒有公郎，應該是外甥承繼，故此選了吉日，把小兒送上門來，做你現現成成的兒子，你不可不受。"
+    wai "承宗立嗣，非同小可，豈有不曾說明，就要承繼之理？且再商量。"
+    ""
+    show neighbor_red at Transform(zoom=0.7, xalign=0.85, yalign=1.0) 
+    show kid at Transform(zoom=0.5, xalign=0.95, yalign=1.0)
+    with moveinright
+    hide yin_fullsize
+    show yin_fullsize at Transform(zoom=1, xalign=0.6, yalign=0.005)
+    ""
+    rneigh "{i}除家累，逐頑雛，送到鄰家去，作兒呼。坐享榮和貴，不愁親父，到他年不享這歡娛。{/i}"
+    rneigh "{i}從今不開舖，從今不開舖。{/i}"
+    ""
+    wai "呀，這是鄰家的伊大哥。為甚麽也攜了酒盒，也帶著令郎過來？"
+    rneigh "此來不為別事，只因老長兄沒有公郎，應該是小兒承繼。故此攜了酒盒，把小兒送上門來，做你嫡嫡親親的兒子，你不可不受。"
+    hide fat_neighbor
+    show fat_neighbor_mad at Transform(zoom=0.6, xalign=0.25, yalign=1.0)
+    fneigh "得！老伊，你好生沒理。外甥繼舅，乃是事理之常，你是何人，也想要來承繼？"
+    fneigh "方才說應該是你，這「應該」兩個字，你且講來我聽。"
+    rneigh "同宗立嗣，古之常理。我與他是同宗，所以說「應該」二字。"
+    fneigh "又來奇了，你姓伊，他姓尹，怎麽叫做同宗？"
+    rneigh "尹字比伊字，只少得一個立人。如今把我家的人，移到他家去，他就可以姓伊，我就可以姓尹了。怎麽不是同姓。"
+    fneigh "好胡說！"
+    fneigh "{i}我笑你學問疏，機謀富，巧支吾，難回護。{/i}"
+    fneigh "{i}不分貴賤高低，妄思綿祚。只怕烏紗飛不上頭顱，止堪服役，賣作傭奴。{/i}"
+    hide neighbor_red
+    show neighbor_red_mad at Transform(zoom=0.7, xalign=0.85, yalign=1.0)
+    hide kid with moveoutright
+    hide teenager
+    hide yin_fullsize 
+    with moveoutleft
+    rneigh "老丈不要太毒。我聞得你這姐夫郎舅，也不十分嫡親，不過是表而已矣！"
+    rneigh "若說表姐丈的兒子定該立嗣，連表子生下的娃娃，也該來承繼了。"
+    hide fat_neighbor_mad
+    show fat_neighbor_fight at Transform(zoom=0.6, xalign=0.25, yalign=1.0)
+    fneigh "好放肆的狗才！叫管家兒子過來，一齊動手，打死這個老賊！"
+    hide neighbor_red_mad
+    show neighbor_red_fight at Transform(zoom=0.7, xalign=0.85, yalign=1.0)
+    rneigh "你有兒子，我也有兒子，你有管家，我也有管家，一個對一個，料想不輸與你。"
+    scene bg fight with hpunch
+    scene bg fight with hpunch
+    scene bg fight with hpunch
+    scene bg fight with hpunch
+
+    wai "呀，這兩個人怎麽打起來了？"
+    show yin_back at Transform(zoom=1, xalign=0.5, yalign=0.005)
+    with dissolve
+    wai "二位快不要如此。小弟這一份家私，自有個應得之人走來承受，不是爭奪得去的。"
+    ""
+    hide yin_back
+    scene bg yinroom with dissolve
+    show teenager_scared at Transform(zoom=0.65, xalign=0.01, yalign=1.0) 
+    with dissolve
+    show fat_neighbor_fight at Transform(zoom=0.6, xalign=0.25, yalign=1.0)
+    with moveinleft
+    fneigh "孩兒過來，拜見你的繼父。"
+    show kid_scared at Transform(zoom=0.5, xalign=0.99, yalign=1.0)
+    with dissolve
+    show neighbor_red_fight at Transform(zoom=0.7, xalign=0.85, yalign=1.0)
+    with moveinright
+    rneigh "我兒過去，叩見你的親爺。"
+    show yin_block_full at Transform(zoom=0.8, xalign=0.5, yalign=0.005)
+
+    wai "尊拜也不敢領，尊呼也不敢當。若還要拜，我只得避進去了。"
+    hide neighbor_red_fight
+    hide fat_neighbor_fight
+    hide yin_block_full
+    show neighbor_red_mad at Transform(zoom=0.7, xalign=0.85, yalign=1.0) 
+    show fat_neighbor_mad at Transform(zoom=0.6, xalign=0.25, yalign=1.0)
+    show yin_block_full at Transform(zoom=0.8, xalign=0.5, yalign=0.005)
+    fnr "既然如此，我們只得告別了。"
+    scene black
+    scene bg gate
+    show fat_neighbor_mad at Transform(zoom=0.6, xalign=0.25, yalign=1.0)
+    show neighbor_red_mad at Transform(zoom=0.7, xalign=0.85, yalign=1.0)
+    show teenager_scared at Transform(zoom=0.65, xalign=0.01, yalign=1.0) 
+    show kid_scared at Transform(zoom=0.5, xalign=0.99, yalign=1.0)
+    fneigh "{i}且穿粗布暫遮風，紬運如今尚未通。{/i}"
+    hide fat_neighbor_mad
+    hide teenager_scared
+    with moveoutleft
+    rneigh "{i}依舊回家開鋪面，命低莫想做封翁。{/i}"
+    hide neighbor_red_mad
+    hide kid_scared
+    with moveoutright
+    show yin_headache at Transform(zoom=0.8, xalign=0.5, yalign=1.0)
+    ""
+    wai "看了這番舉動，我那出門求子的事，一發緩不得了。"
+    wai "明日就打點登程，且到途中再商議尋人之法便了。"
+    scene black
+    $ character_positions["wai"] = "鄖陽"
+    $ character_positions["laodan"] = "鄖陽"
+    pause 1.0
+    $ renpy.notify(f"角色位置：{character_positions}")
+    $ end_of_act("爭繼")
+    if store.act_no ==5:
+        jump dating
+    else:
+        menu:
+            "接下來要讓哪個腳色上場？" 
+            "末" if "開場" not in act_history:
+                jump mo_debut
+            "生（姚繼）" if "夢訊" not in act_history:
+                jump sheng_debut
+            "旦（曹儷人）及其家人" if "議贅" not in act_history:
+                jump dan_debut
+            "讓曹玉宇去找姚繼，看看他有何話說":
+                jump try_sheng
+
+
+label try_sheng:
+    scene black
+    $ show_act_title_auto()
+    show sheng_2_pensive at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
+    sh "小生自得夢訊以來，心事愈加煩悶。好幾日不看書了，不免展開一卷，吟誦片時。"
+
+label dating:
+    scene black
+    $ show_act_title_auto()
+    
     return
 
 
