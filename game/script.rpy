@@ -11,7 +11,7 @@ define old = Character("鄰翁")
 define dan = Character("曹儷人")
 define yaofu = Character("姚器汝")
 define yaocao = Character("曹玉宇（姚器汝）")
-define yaowife = Character("曹夫人")
+define yaowife = Character("曹夫人（姚夫人）")
 define wai = Character("尹小樓")
 define waiwife = Character("尹夫人")
 define fneigh = Character("表姐丈")
@@ -83,9 +83,10 @@ label after_skip:
     scene bg room    # 或 scene black
     hide li yu
     show screen book_icon
-    $ book_debug = True
     narrator "你可以點擊笠翁新刊書籍，看看他有何指教。"
     narrator "笠翁已將書本奉送給你，你可以隨時翻閱。"
+    show screen map_icon
+    narrator "笠翁另贈一卷地圖，方便你隨時確認劇中何人位在何地。"
     $ end_of_act("笠翁")
 
 label commit_writing:
@@ -98,12 +99,18 @@ label commit_writing:
         "再讀一會兒書，能拖則拖":
             show screen book_viewer
             jump commit_writing
-
-label open_book:
-    show screen book_viewe
+        "取地圖來展卷遨遊，能拖則拖":
+            call screen world_map
+            jump commit_writing
+label open_map:
+    show screen world_map
     $ ui.interact()  # 等待玩家操作書本
     return
 
+label open_book:
+    show screen book_viewer
+    $ ui.interact()  # 等待玩家操作書本
+    return
 
 label choose_first_actor:
     narrator "即將搬演第一齣。"
@@ -291,9 +298,8 @@ label open_chest:
     sh "我這東鄰有一女子，貌頗傾城，他屢屢顧盼小生，只是瓜李之嫌，不可不避。"
     sh "且自由他，我且把玉尺收好，看到後來有何應驗。"
     scene black
-    $ character_positions["sheng"] = "漢陽"
+    $ character_positions["姚繼"] = "漢陽/Hanyang"
     pause 1.0
-    $ renpy.notify(f"角色位置：{character_positions}")
     $ end_of_act("夢訊")
     menu:
         "接下來要讓哪個腳色上場？"
@@ -389,11 +395,10 @@ label dan_debut:
     yaofu "這等世界，倒不喜他會讀書，只要老成練達，做得事來就可以相許。"
     yaofu "我明日見他，自有話說。"
     scene black
-    $ character_positions["dan"] = "漢陽"
-    $ character_positions["yaofu"] = "漢陽"
-    $ character_positions["yaowife"] = "漢陽"
+    $ character_positions["曹儷人"] = "漢陽/Hanyang"
+    $ character_positions["曹玉宇（姚器汝）"] = "漢陽/Hanyang"
+    $ character_positions["曹夫人（姚夫人）"] = "漢陽/Hanyang"
     pause 1.0
-    $ renpy.notify(f"角色位置：{character_positions}")
     $ end_of_act("議贅")
     menu:
         "接下來要讓哪個腳色上場？"
@@ -544,11 +549,14 @@ label wai_debut:
     wai "看了這番舉動，我那出門求子的事，一發緩不得了。"
     wai "明日就打點登程，且到途中再商議尋人之法便了。"
     scene black
-    $ character_positions["wai"] = "鄖陽"
-    $ character_positions["laodan"] = "鄖陽"
+    $ character_positions["尹小樓"] = "鄖陽/Yunyang"
+    $ character_positions["尹夫人"] = "鄖陽/Yunyang"
     pause 1.0
-    $ renpy.notify(f"角色位置：{character_positions}")
     $ end_of_act("爭繼")
+
+    ""
+    ""
+    ""
     if store.act_no ==5:
         jump dating
     else:

@@ -2,18 +2,28 @@
 default act_history = []
 default act_no = 0
 
+# 角色中英名字
+default character_engnames = {
+    "姚繼": "Yao Ji",
+    "曹儷人": "Cao Liren",
+    "曹玉宇（姚器汝）": "Cao Yuyu (Yao Qiru)",
+    "曹夫人（姚夫人）": "Madam Cao (Madam Yao)",
+    "尹小樓": "Yin Xiaolou",
+    "尹夫人": "Madam Yin"
+}
+
 # 所有角色的位置（初始都在 None 或者指定地點）
 default character_positions = {
-    "sheng": None,      # 角色「生」，即姚繼
-    "dan": None,   # 角色「旦」，即曹小姐
-    "yaofu": None,     # 角色姚父
-    "yaowife": None,     # 角色姚夫人
-    "wai": None,     # 角色「外」，即尹小樓
-    "laodan": None, # 角色「老旦」，即尹妻
+    "姚繼": None,      # 角色「生」，即姚繼
+    "曹儷人": None,   # 角色「旦」，即曹小姐
+    "曹玉宇（姚器汝）": None,     # 角色姚父
+    "曹夫人（姚夫人）": None,     # 角色姚夫人
+    "尹小樓": None,     # 角色「外」，即尹小樓
+    "尹夫人": None, # 角色「老旦」，即尹妻
 }
 
 # 團圓檢查的目標地點
-define reunion_location = "鄖陽"  # 可以改成其他地點
+define reunion_location = "鄖陽/Yunyang"  # 可以改成其他地點
 
 init python:
     def start_new_run():

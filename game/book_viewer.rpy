@@ -86,7 +86,7 @@ screen book_viewer():
         ypos 10
         background Solid((0, 0, 0, 180))
         padding (5, 5)
-        text "Mouse: [mouse_pos[0]], [mouse_pos[1]]\nBook: [book_local_pos[0]], [book_local_pos[1]]" color "#FFFFFF" size 16
+        #text "Mouse: [mouse_pos[0]], [mouse_pos[1]]\nBook: [book_local_pos[0]], [book_local_pos[1]]" color "#FFFFFF" size 16
 
     frame:
         xalign 0.5
@@ -161,14 +161,6 @@ screen book_viewer():
                 padding (10, 10)
                 text book_tooltip color "#FFFFFF" size 24
 
-    # Debug: Show mouse coordinates
-    frame:
-        xpos 10
-        ypos 10
-        background Solid((0, 0, 0, 180))
-        padding (5, 5)
-        text "Mouse: [mouse_pos[0]], [mouse_pos[1]]\nBook: [book_local_pos[0]], [book_local_pos[1]]" color "#FFFFFF" size 16
-
 screen book_translation_popup(text):
     frame:
         xalign 0.5
@@ -184,9 +176,9 @@ screen book_translation_popup(text):
 screen book_icon():
     zorder 100
     imagebutton:
-        idle Transform("images/book_icon.png", zoom=0.15)
-        hover Transform("images/book_icon_hover.png", zoom=0.15)
-        xpos 30
+        idle Transform("images/book_icon.png", zoom=0.12)
+        hover Transform("images/book_icon.png", zoom=0.15)
+        xpos 70
         ypos 80
         action [
             Show("book_viewer")        ]

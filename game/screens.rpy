@@ -1662,18 +1662,3 @@ init python:
         renpy.hide_screen("act_title")
 
 default show_actnumber = False
-
-#map
-screen world_map():
-    tag map
-    add "images/map_base.png"  # the base image of the map
-
-    # Example location button: East Chamber
-    imagebutton:
-        idle "images/btn_east_idle.png"
-        hover "images/btn_east_hover.png"
-        xpos 300
-        ypos 400
-        action ShowMenu("location_info", location="east_chamber")
-
-    # Add more buttons for other locations...
