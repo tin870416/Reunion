@@ -2,22 +2,23 @@
 screen map_icon():
     zorder 100
     imagebutton:
-        idle Transform("images/mapicon.png", zoom=0.1)
-        hover Transform("images/mapicon.png", zoom=0.15)
+        idle Transform("images/mapicon.png", zoom=0.08)
+        hover Transform("images/mapicon.png", zoom=0.11)
         xalign 0.95
-        yalign 0.98
+        yalign 0.9
         action Show("world_map", is_inline=True)
 
 
 #map
 init python:
     style.close_button = Style(style.default)
-    style.close_button.xalign = 0.98
-    style.close_button.yalign = 0.02
+    style.close_button.xalign = 0.83
+    style.close_button.yalign = 0.12
     style.close_button.padding = (10,10)
-    style.close_button.background = Frame("#00000088", 2, 2)
-    style.close_button.hover_background = Frame("#6d6d6dcc", 2, 2)
-    style.close_button_text.size = 25
+    style.close_button.background = Frame("#052953db", 2, 2)
+    style.close_button.hover_background = Frame("#1f242e9f", 2, 2)
+    style.close_button_text.size = 30
+    style.close_button_text.font = "font/BigCaslon.ttf"
 
     # 正確設定字體顏色：text部分的樣式需獨立設定
     style.close_button_text.color = "#ffffff"
@@ -35,8 +36,9 @@ screen world_map(is_inline=False):
                 xsize 1300
                 ysize 720
                 draggable True
+                mousewheel True         # ✅ 建議保留，支援滾輪
                 scrollbars "horizontal"
-                mousewheel True
+
 
                 fixed:
                     xsize int(2500 * 0.9)  # 地圖縮放後實際寬度
@@ -121,7 +123,7 @@ screen world_map(is_inline=False):
                             text "[chinese_str] 在這裡。" size 15 xalign 0.5 color "#ffffff"
                             text "[english_str] [verb] here." size 15 xalign 0.5 color "#ffffff" 
                         else:
-                            text "目前無要角在此地。No major characters are here." size 15 xalign 0.5 color "#ffffff"
+                            text "目前無要角在此地。No major characters here." size 15 xalign 0.5 color "#ffffff"
     if is_inline:
         textbutton "Close":
             style "close_button"

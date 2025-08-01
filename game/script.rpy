@@ -29,7 +29,10 @@ image bg garden = Transform("garden.png", zoom=1.25)
 image bg fight = Transform("fight.png", zoom=1.25)
 image bg childroom_blur = im.Blur(im.FactorScale("images/childroom.png", 1.25), 4.0)
 image hand = "hand.png"
-image bg_fight_shake = "bg/fight.jpg"
+image bg_fight_shake = "fight.png"
+image bg yaostudy = Transform("yaostudy.png", zoom=1.25)
+image bg shengreading = Transform ("sheng_reading3.png", zoom=1.25)
+image bg boudoir = Transform ("boudoir.png", zoom=1.25)
 
 
 default preferences.skip_unseen = True
@@ -228,6 +231,7 @@ label sheng_debut:
     if store.act_no == 2 and "開場" in store.act_history:
         $ renpy.notify("沖場用生，一本戲文之好歹，即於此時定價。")
     ""
+    $ character_positions["姚繼"] = "漢陽/Hanyang"
     sh "{i}飽殺侏儒。嘆饑時曼倩，望米如珠。長貧知有意，天欲盡其膚。{/i}"
     sh "{i}除故我，換新吾，才許建雄圖。看士人，改軀換貌，盡賴詩書。{/i}"
     ""
@@ -298,8 +302,13 @@ label open_chest:
     sh "我這東鄰有一女子，貌頗傾城，他屢屢顧盼小生，只是瓜李之嫌，不可不避。"
     sh "且自由他，我且把玉尺收好，看到後來有何應驗。"
     scene black
-    $ character_positions["姚繼"] = "漢陽/Hanyang"
     pause 1.0
+    if store.act_no == 1:
+        $ renpy.notify("可以點開地圖，看看姚繼現在在哪裡！")
+        $ renpy.notify("遊戲過程可以隨時檢查人物地點，確保他們在離散之後終能走上團圓之路。")
+    elif store.act_no ==2 and "開場" in store.act_history:
+        $ renpy.notify("可以點開地圖，看看姚繼現在在哪裡！")
+        $ renpy.notify("遊戲過程可以隨時檢查人物地點，確保他們在離散之後終能走上團圓之路。")
     $ end_of_act("夢訊")
     menu:
         "接下來要讓哪個腳色上場？"
@@ -322,6 +331,9 @@ label dan_debut:
     if store.act_no == 2 and "開場" in store.act_history:
         $ renpy.notify("李漁：沖場竟不用生，似乎不是詞場常格。")
     ""
+    $ character_positions["曹儷人"] = "漢陽/Hanyang"
+    $ character_positions["曹玉宇（姚器汝）"] = "漢陽/Hanyang"
+    $ character_positions["曹夫人（姚夫人）"] = "漢陽/Hanyang"
     yaofu "市城戎馬地，決策早居鄉。妻子無多口，琴書只一囊。"
     ""
     yaofu "老夫姚器汝，號東山，蜀川人也。"
@@ -395,10 +407,13 @@ label dan_debut:
     yaofu "這等世界，倒不喜他會讀書，只要老成練達，做得事來就可以相許。"
     yaofu "我明日見他，自有話說。"
     scene black
-    $ character_positions["曹儷人"] = "漢陽/Hanyang"
-    $ character_positions["曹玉宇（姚器汝）"] = "漢陽/Hanyang"
-    $ character_positions["曹夫人（姚夫人）"] = "漢陽/Hanyang"
     pause 1.0
+    if store.act_no == 1:
+        $ renpy.notify("可以點開地圖，看看曹家人現在在哪裡！")
+        $ renpy.notify("遊戲過程可以隨時檢查人物地點，確保他們在離散之後終能走上團圓之路。")
+    elif store.act_no ==2 and "開場" in store.act_history:
+        $ renpy.notify("可以點開地圖，看看曹家人現在在哪裡！")
+        $ renpy.notify("遊戲過程可以隨時檢查人物地點，確保他們在離散之後終能走上團圓之路。")
     $ end_of_act("議贅")
     menu:
         "接下來要讓哪個腳色上場？"
@@ -422,6 +437,8 @@ label wai_debut:
         $ renpy.notify("李漁：沖場竟不用生，似乎不是詞場常格。")
     show yin_fullsize at Transform(zoom=1.2, xalign=0.7, yalign=0.005)
     ""
+    $ character_positions["尹小樓"] = "鄖陽/Yunyang"
+    $ character_positions["尹夫人"] = "鄖陽/Yunyang"
     wai "{i}天道無知，如聾似瞽，善人後嗣全無。鷙同梟鳥，偏自擁多雛。{/i}"
     ""
     wai "老夫姓尹名厚，別號小樓，湖廣鄖陽人也。"
@@ -549,9 +566,13 @@ label wai_debut:
     wai "看了這番舉動，我那出門求子的事，一發緩不得了。"
     wai "明日就打點登程，且到途中再商議尋人之法便了。"
     scene black
-    $ character_positions["尹小樓"] = "鄖陽/Yunyang"
-    $ character_positions["尹夫人"] = "鄖陽/Yunyang"
     pause 1.0
+    if store.act_no == 1:
+        $ renpy.notify("可以點開地圖，看看尹家人現在在哪裡！")
+        $ renpy.notify("遊戲過程可以隨時檢查人物地點，確保他們在離散之後終能走上團圓之路。")
+    elif store.act_no ==2 and "開場" in store.act_history:
+        $ renpy.notify("可以點開地圖，看看尹家人現在在哪裡！")
+        $ renpy.notify("遊戲過程可以隨時檢查人物地點，確保他們在離散之後終能走上團圓之路。")
     $ end_of_act("爭繼")
 
     ""
@@ -568,20 +589,73 @@ label wai_debut:
                 jump sheng_debut
             "旦（曹儷人）及其家人" if "議贅" not in act_history:
                 jump dan_debut
-            "讓曹玉宇去找姚繼，看看他有何話說":
+            "讓曹玉宇去找姚繼，看看他有何話說" if "議贅" in act_history:
                 jump try_sheng
 
 
 label try_sheng:
     scene black
     $ show_act_title_auto()
-    show sheng_2_pensive at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
+    scene bg yaostudy
+    show sheng_pensive_full at Transform(zoom=1, xalign=0.7, yalign=0.1)
+    ""
     sh "小生自得夢訊以來，心事愈加煩悶。好幾日不看書了，不免展開一卷，吟誦片時。"
+    hide sheng_pensive_full
+    scene bg shengreading
+    ""
+    sh "{i}我意兒中撇不下的愁緒，好像這卷兒中析不出的疑義。{/i}"
+    sh "{i}我欲待不思親權刪抹了孝思，怎奈這《蓼莪》篇欲廢則是難輕廢。{/i}"
+    sh "可惜遇著亂世，我這求名的念頭不十分急切，若在太平之世，把這等文字去求取功名，我姚克承何愁不富，何愁不貴？"
+    ""
+    scene bg yaostudy with dissolve
+    show yaofu_full at Transform(zoom=1, xalign=0.2, yalign=0.001) 
+    with dissolve
+    yaofu "{i}立後事輕微，也待把諸艱歷試。欲待要覘他動靜，不妨私啟柴扉。{/i}"
+    show sheng_greet_full at Transform(zoom=1.1, xalign=0.8, yalign=0.01)
+    with dissolve
+    sh "呀，曹老伯過來了，有失趨迎，得罪，得罪！"
+    yaofu "姚小官，你終日靜坐，不見出門，在家做些甚麽？"
+    sh "不是讀書，就是作文，此外並無一事。"
+    hide sheng_greet_full
+    show sheng_nolaugh_full at Transform(zoom=1.1, xalign=0.8, yalign=0.01)
+    yaofu "好沒正經，這等亂離之世，身家性命也難保，還去讀甚麽書？作甚麽文？你也迂闊極了。"
+    sh "照老伯這等講來，當今的天下是不能平靜的了？"
+    yaofu "萬萬不能。"
+    sh "既然如此，讀書何用？只是一件，我們做秀才的人，除了讀書沒有別樣事做，卻怎麽好？"
+    yaofu "當此之時，只有三等人好做：第一等是術士，第二等是匠工，第三等是商賈。"
+    sh "怎見得這三等人好做？"
+    yaofu "處此亂世，遇了賊兵，保得性命就勾了，一應田產家私都不能攜帶。"
+    yaofu "那術士、匠工，把技藝當了家私，藏在腹中，隨處可以覓食，所以算做上中二等。"
+    yaofu "為商作賈的人，平日做慣貿易，走過江湖。"
+    yaofu "把山川形勢、人情土俗，都看在眼里，知道某處可以避兵，某路可以逃難。"
+    yaofu "到那危急之際，就好挈帶妻子前行，若留得幾兩本錢，還可以營生度活。"
+    yaofu "這雖是最下一等，卻人人可做，又不失體面。"
+    yaofu "我且問你，你曾學得些術數技藝麽？"
+    sh "據小侄看來，老伯所說的下等，倒是小侄的上著，只可惜沒有本錢，說不起為商作賈的話。"
+    yaofu "只怕有了本錢，你也未必會做。"
+    sh "拚得吃些辛苦，有什麼做不來？"
+    sh "不瞞老伯講，先君在日原以販布為生，慣走松江一路，還有許多賬目放在各莊，不曾收起，都有票約可憑。"
+    sh "若借得幾兩盤纏，去走一次回來，定不落空，只可惜沒有這個債主。"
+    hide yaofu_full at Transform(zoom=1, xalign=0.2, yalign=0.001) 
+    show yaofu_full at Transform(zoom=1, xalign=0.2, yalign=0.001, xzoom=-1) 
+    yaofu "我正要試他，不如就從這樁事起。"
+    hide yaofu_full
+    show yaofu_full at Transform(zoom=1, xalign=0.2, yalign=0.001) 
+    yaofu "盤費不難，出在老夫身上。"
+    yaofu "我還有幾兩本錢，煩你順帶前去，捎些布匹回來。若還不負所托，將來還有所商。"
+    hide sheng_nolaugh_full
+    show sheng_greet_full at Transform(zoom=1.1, xalign=0.8, yalign=0.01)
+    sh "若得如此，感恩不盡。明日就送券約過來。"
+    yaofu "那倒不消。只是早早回家，不使老夫盼望，就是盛情了。"
+    
 
 label dating:
     scene black
     $ show_act_title_auto()
-    
+    scene bg boudoir
+    with dissolve
+    pause 1.5
+    show 
     return
 
 

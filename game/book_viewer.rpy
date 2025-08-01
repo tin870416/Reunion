@@ -176,9 +176,9 @@ screen book_translation_popup(text):
 screen book_icon():
     zorder 100
     imagebutton:
-        idle Transform("images/book_icon.png", zoom=0.12)
-        hover Transform("images/book_icon.png", zoom=0.15)
-        xpos 70
-        ypos 80
+        idle Transform("images/book_icon.png", zoom=0.1)
+        hover Transform("images/book_icon.png", zoom=0.13)
+        xalign 0.86
+        yalign 0.9
         action [
             Show("book_viewer")        ]
