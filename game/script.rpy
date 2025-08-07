@@ -17,6 +17,12 @@ define waiwife = Character("尹夫人")
 define fneigh = Character("表姐丈")
 define rneigh = Character("伊大哥")
 define fnr = Character("表姐丈、伊大哥")
+define tiger = Character("一隻虎")
+define wolf = Character ("獨行狼")
+define scorpion = Character ("蠍子塊")
+define star = Character ("過天星")
+define chuang = Character ("李自成")
+define soldiers = Character ("眾將")
 image bg room = Transform("images/room.png", zoom=1.5)
 image bg gate = Transform("images/gate.png", zoom=1.3)
 image bg yaoroom = Transform("images/yaoroom.png", zoom=1.5)
@@ -33,7 +39,11 @@ image bg_fight_shake = "fight.png"
 image bg yaostudy = Transform("yaostudy.png", zoom=1.25)
 image bg shengreading = Transform ("sheng_reading3.png", zoom=1.25)
 image bg boudoir = Transform ("boudoir.png", zoom=1.25)
-
+image bg military = Transform ("military.png", zoom=1.25)
+image bg cottage = Transform ("cottage.png", zoom=1.25)
+image bg door_open = Transform ("dooropen.png", zoom=1.5, xalign=1, yalign=1)
+image bg dan_out = Transform ("dooropen_dan.png", zoom=1.25)
+image bg dan_out_2 = Transform ("dooropen_dan_2.png", zoom=1.25)
 
 default preferences.skip_unseen = True
 
@@ -50,21 +60,15 @@ label restore_window:
     return
 label start:
     $ start_new_run()
+    jump date
+    return
     show screen skip_to_next_menu_button
-    # 顯示背景。 預設情況下，它使用佔位符，但您可以
-    # 將檔案（名為 "bg room.png" 或 "bg room.jpg"）新增至
-    # images 目錄來顯示它。
-
-    scene bg room
-
-    # 這顯示了一個角色精靈。 使用了佔位符，但您可以
-    # 透過將名為 "eileen happy.png" 的檔案
-    # 新增至 images 目錄來取代它。
-
+    scene bg room with fade
+    play music "audio/softbgm.mp3" fadein 3.0
+    pause 4.0
     show li yu at Transform(zoom=0.7, xalign=0.5, yalign=0.5)
-
-    # 這些顯示對話行。
-
+    with dissolve
+    ""
     yu "傳奇原為消愁設，費盡杖頭歌一曲。"
     yu "唯我填詞不賣愁，一夫不笑是吾憂。"
     yu "老夫李漁，賤號笠翁，專候閣下已久了！"
@@ -98,6 +102,7 @@ label commit_writing:
         "開始寫作":
             narrator "好的，這就為你研墨。"
             scene black with fade
+            stop music fadeout 1.0
             jump choose_first_actor
         "再讀一會兒書，能拖則拖":
             show screen book_viewer
@@ -577,7 +582,6 @@ label wai_debut:
 
     ""
     ""
-    ""
     if store.act_no ==5:
         jump dating
     else:
@@ -649,14 +653,190 @@ label try_sheng:
     yaofu "那倒不消。只是早早回家，不使老夫盼望，就是盛情了。"
     
 
-label dating:
+label handkerchief:
     scene black
     $ show_act_title_auto()
     scene bg boudoir
     with dissolve
     pause 1.5
-    show 
-    return
+    show dan_foldarms at Transform(zoom=0.9, xalign=0.5, yalign=0.999) 
+    ""
+    dan "奴家幼失父母，寄養於姚氏之門，蒙他愛若親生，又許我贅夫承繼，這是極遂心的事了。"
+    dan "怎奈爹爹過於詳慎，定要把艱難困苦之事，試過幾樁，才與他完姻締好。"
+    dan "此時賊氛四起，刻刻有喪亂之憂，既得其人，就該速許，為甚麽還要遲疑觀望？"
+    dan "聞得昨日給了資本，著他往松江貿易，許親的話並不提起。"
+    dan "我想如此亂世，凡有閨女的人家，個個都想贅婿，有他這種才貌，那一處不得良緣？"
+    dan "萬一在途路之間，被人要截了去，我再想這等一位才郎，就萬萬不能勾了。"
+    dan "我與姚生的婚姻，既出父母之口，又處離亂之世，若還父母不決斷，自己又不決斷，就叫做見義不為，豈不誤了終身之事？"
+    dan "我不如會他一面，許下婚姻，然後待他出去，方才穩妥。"
+    ""
+    dan "我想夜間會他，到底不妥，明人不作暗事，竟在青天白日之下，何等不好！"
+    dan "不如借筆墨傳情，寫幾句話兒示意於他便了。"
+    dan "筆硯在此，待我取一幅綾帕出來。"
+    hide dan_foldarms
+    show handkerchief
+    ""
+    narrator "寫點什麼好呢？"
+    label choose_write:
+    menu: 
+        "寫點什麼好呢？"
+        "窈窕淑女，君子好逑":
+            ""
+            dan "我道為甚麽寫不下去，原來被「窈窕」二字礙住了手。"
+            dan "這「窈窕」二字，乃是風人的口氣，豈有做婦人家的自誇窈窕之理？"
+            jump choose_write
+        "窈窕君子，淑女好逑":
+            hide handkerchief
+            with dissolve
+            show yaotiao
+            with dissolve
+            ""
+            dan "帕已寫完，待我藏在袖中，遇見他的時節，擲在籬邊，且看他怎生回答？"
+            jump handkerchief_end
+
+label handkerchief_end:
+    scene black
+    pause 1.0
+    $ end_of_act("書帕")
+    menu:
+        "主要人物都上場了，下一幕要..."
+        "打鐵趁熱，搬演姚繼和曹儷人密會戲碼。":
+            jump date
+        "調劑氛圍，安排反派登場。":
+            jump villain
+
+label date:
+    scene black
+    $ show_act_title_auto()
+    scene bg cottage
+    show sheng_foldarms_full at Transform(zoom=1, xalign=0.5, yalign=0.1, xzoom=-1)
+    ""
+    sh "小生自蒙高鄰仗義，不受券約，假以多金，眼見得治生有賴，行囊早已辦就，只在明日起行。"
+    sh "我乃無家無室之人，作客與在家總是一樣。論起理來，今日出門，只該歡歡喜喜，沒有一毫牽掛才是。"
+    sh "怎麽這心窩里面，還有些不伶不俐，卻像有些甚麽物件丟不下一般？"
+    ""
+    hide sheng_foldarms_full
+    show sheng_foldarms_full at Transform(zoom=1, xalign=0.5, yalign=0.1)
+    sh "哦，是了，這籬笆西首，就是曹小姐的臥房。"
+    sh "他時常隔著籬笆，將一雙嬌嬌滴滴的眼兒覷我，所以走到這邊，就覺得依依難捨。"
+    sh "原來我不忍離家，就為著這樁心事。"
+    $ renpy.notify("李漁：生旦相見，務使委曲婉轉")
+    pause 1.5
+    $ renpy.notify("最能搖人心魄者，得教移船相近，卻還猶抱琵琶！")
+    ""
+    hide sheng_foldarms_full
+    show bg door_open
+    sh "你看臥房門啟，想是曹小姐聽見聲音，知道小生在此，又出來探望了。"
+    sh "我且閃在一邊，看他出來做些甚麽？"
+    ""
+    show bg dan_out
+    show sheng_2_contemplate at Transform(zoom=0.4, xalign=0.95, yalign=0.999)
+    ""
+    sh "你看他遮遮掩掩，欲進不進，分明要待我呼喚，方才近身。"
+    sh "噯！我若要招攬他來，有甚難處，只為他父親是個好人，又有恩義到我，我若調戲他令愛，就是個負心漢了。"
+    ""
+    dan "立了半晌，不見他則聲，可見是個志誠君子，愈加令人起敬。"
+
+label villain:
+    scene black
+    $ show_act_title_auto()
+    scene bg military
+    play music "audio/drums.mp3" fadein 3.0
+    pause 4.0
+    ""
+    show soldier_tiger at Transform(zoom=0.65, xalign=0.95, yalign=0.05)
+    with dissolve
+    tiger "小將名為一只虎，丈八長矛三尺斧。"
+    tiger "殺人最喜殺肥人，好剝寬皮蒙大鼓。"
+    tiger "自家非別，闖王部下一個頭目，喚做一只虎的便是。王爺升殿，須索伺候。"
+    show soldier_wolf at Transform(zoom=0.9, xalign=0.02, yalign=0.05)
+    with dissolve
+    wolf "小將名為獨行狼，擾盡中原孰敢當？"
+    wolf "殺人最喜殺秀士，好充鮮味呷酸湯。"
+    wolf "自家非別，闖王部下一個頭目，喚做獨行狼的是也。王爺升殿，須索伺候。"
+    show soldier_scorpion at Transform(zoom=0.7, xalign=0.3, yalign=0.1)
+    with dissolve
+    scorpion "小將名為蠍子塊，赤手沖鋒不持械。"
+    scorpion "殺人最喜殺婦人，下段腌來充淡菜。"
+    scorpion "自家非別，闖王部下一個頭目，喚做蠍子塊的是也。王爺升殿，須索伺候。"
+    show soldier_star at Transform(zoom=0.8, xalign=0.7, yalign=0.001)
+    with dissolve
+    star "小將名為過天星，獨自屠城不帶兵。"
+    star "殺人最喜殺美女，好從刀下聽嬌聲。"
+    star "自家非別，闖王部下一個頭目，喚做過天星的是也。王爺升殿，須索伺候。"
+    ""
+    hide soldier_tiger
+    hide soldier_wolf
+    hide soldier_scorpion
+    hide soldier_star
+    with dissolve
+    show chuang_mad_full at Transform(zoom=1, xalign=0.5, yalign=0.2)
+    with dissolve
+    ""
+    chuang "談笑揮戈霸業成，自言吾合繼朱明。"
+    chuang "雖然未正官家號，久噪中原帝子名。"
+    chuang "孤家李自成是也。"
+    chuang "只因孤家不讀兵書，好為野戰，攻城掠地，只以沖突為先。"
+    chuang "所以四海聞名，齊上尊號，背後呼為闖賊，當面喚作闖王。"
+    chuang "凡是投兵效用之人，聞闖即來，非闖即去。"
+    chuang "只要闖得天下到手，就拿這個字眼做了國號，也未嘗不可。"
+    chuang "今日分兵遣將，經略中原，不免升殿號令一番，然後起兵前去。"
+    ""
+    chuang "眾將官齊集東廊聽點！"
+    soldiers "嗄！"
+    chuang "統領陸師，經略山東、山西等處，權將軍一隻虎。"
+    show soldier_tiger at Transform(zoom=0.65, xalign=0.05, yalign=0.05)
+    with dissolve
+    tiger "有！"
+    chuang "那青齊負山面海，晉趙表里山河，都有重兵防守，你有何力量，攻取得來？說與孤家聽者。"
+    tiger "{i}何用費焦勞，不是兵微餉少。看蜂屯蟻聚，人人慮閒憂飽；更喜的是貪財慕色，破堅城似渴馬奔池沼。{/i}"
+    chuang "好，正合著孤家的意思。與你十萬精兵，沿途去搜刮糧餉。"
+    chuang "統領陸師，經略河南、陜西等處，權將軍獨行狼。"
+    hide soldier_tiger
+    show soldier_wolf at Transform(zoom=0.9, xalign=0.98, yalign=0.05, xzoom=-1)
+    with dissolve
+    wolf "有！"
+    chuang "那中州負嵩繞洛，西秦有百二山河，也都是重兵防守。你有何力量攻取得來？說與孤家聽者。"
+    wolf "{i}心高，恨不把全任上肩挑，何況彈丸輕小。只靴尖一踢，把華嵩變做池沼。{/i}"
+    chuang "好，也合著孤家的意思。與你十萬精兵，沿途去搜刮糧餉。"
+    chuang "統領水陸二師，經略南京、浙江等處，權將軍蠍子塊。"
+    hide soldier_wolf
+    show soldier_scorpion at Transform(zoom=0.7, xalign=0.05, yalign=0.1)
+    with dissolve
+    scorpion "有！"
+    chuang "這一京一省，乃是中原財賦之地，我要力攻，他也決要死守。你有何計何能，可以一鼓而下？"
+    scorpion "{i}富民多，堅城少，重資繁，開門早。這是行兵訣，行兵訣不爽分毫。{/i}"
+    chuang "一發講的好，足見胸中的韜略。與你二十萬雄兵，沿途去搜刮糧餉。"
+    chuang "統領水陸二師，經略湖廣、江西等處，權將軍過天星。"
+    hide soldier_scorpion
+    show soldier_star at Transform(zoom=0.8, xalign=0.98, yalign=0.001)
+    with dissolve
+    star "有！"
+    chuang "湖廣、江西二省，這都是中原形勝之地，恐怕黔、蜀二處的援兵順流而下，與我兵相抗起來，勝敗未可知也。你有何必勝之策，保得無虞？"
+    star "{i}少聲援，心偏小，靠鄰封，城難保。這也是行兵訣，行兵訣不爽分毫。{/i}"
+    star "{i}怕甚麽猛舟師萬櫓齊搖，等援兵來到，頭枯額已焦。{/i}"
+    chuang "一發講得妙，足見平日的智謀。與你二十萬雄兵，沿途去搜刮糧餉。"
+    pause 0.5
+    hide soldier_star with dissolve
+    show soldiers_back at Transform(zoom=1.5, xalign=0.5, yalign=-0.4)
+    with dissolve 
+    ""
+    chuang "我且問諸位，行兵之道，當以何事為先？"
+    soldiers "古語道得好，三軍未動，糧草先行，措餉是第一著。"
+    chuang "說的不差。只是措餉之法多端，你們未必盡曉，待孤家歷數一遍。"
+    soldiers "正要求千歲指教。"
+    chuang "第一是嚴搜庫藏，第二是洗刮民財，第三是酷比縉紳，第四是多掠婦女。"
+    chuang "這四樁事情，都是生財的大道，你們須要緊記在心。"
+    soldiers "請問千歲：那嚴搜庫藏，遍掠民財，是臣等做慣的事，不說自明。"
+    soldiers "只有酷比縉紳，多掠婦女，這兩句話還不甚解，再求明示一番。"
+    chuang "縉紳做過美官，家家都有積蓄，處此亂世，定有法子收藏，決不放在家中，被人搜取，不是嚴刑拷打，如何逼得出來？"
+    chuang "婦女各有親人，擄在軍中，不怕不來取贖。等到一兩月之後，沒人來取，就將他變賣，也是一宗軍餉。故此都叫做生財之道。"
+    soldiers "千歲極講得是，謹遵聖諭而行。"
+    chuang "軍令既已申明，就此起兵前去。"
+    scene black
+    pause 1.0
+    $ end_of_act("闖氛")
+return
 
 
     # 遊戲結束。
